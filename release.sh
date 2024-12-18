@@ -74,18 +74,44 @@ echo "Enter release notes (press Ctrl+D when done):"
 release_notes=$(cat)
 
 # Update CHANGELOG.md
-changelog_entry="## [${new_version}] - $(date +%Y-%m-%d)
-${release_notes}
-"
+changelog_entry="## [${new_version}] - $(date +%Y-%m-%d)\n${release_notes}\n"
 
 if [ -f CHANGELOG.md ]; then
-  # Insert new entry after the first occurrence of "# Changelog"
-  sed -i.bak "s/# Changelog/# Changelog\n\n${changelog_entry}/" CHANGELOG.md
-  rm CHANGELOG.md.bak
-else
-  echo "# Changelog
+  # Create temporary file
+  temp_file=$(mktemp)
 
-${changelog_entry}" >CHANGELOG.md
+  # Add header if file is empty
+  if [ ! -s CHANGELOG.md ]; then
+    echo "# Changelog" >"$temp_file"
+    echo "" >>"$temp_file"
+  else
+    # Copy existing content
+    cp CHANGELOG.md "$temp_file"
+  fi
+
+  # Find the position after the header
+  header_line=$(grep -n "# Changelog" "$temp_file" | cut -d: -f1)
+  if [ -n "$header_line" ]; then
+    # Split the file and insert new entry
+    head -n "$header_line" "$temp_file" >CHANGELOG.md
+    echo "" >>CHANGELOG.md
+    echo -e "$changelog_entry" >>CHANGELOG.md
+    tail -n +$((header_line + 1)) "$temp_file" >>CHANGELOG.md
+  else
+    # If no header found, add it with the new entry
+    echo "# Changelog" >CHANGELOG.md
+    echo "" >>CHANGELOG.md
+    echo -e "$changelog_entry" >>CHANGELOG.md
+    cat "$temp_file" >>CHANGELOG.md
+  fi
+
+  # Clean up
+  rm "$temp_file"
+else
+  # Create new CHANGELOG.md
+  echo "# Changelog" >CHANGELOG.md
+  echo "" >>CHANGELOG.md
+  echo -e "$changelog_entry" >>CHANGELOG.md
 fi
 
 # Commit changes
