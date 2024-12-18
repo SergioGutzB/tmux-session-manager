@@ -2,13 +2,13 @@
 
 set -e
 
-# Colores para mensajes
+# Colors for messages
 GREEN='\033[0;32m'
 RED='\033[0;31m'
 YELLOW='\033[1;33m'
 NC='\033[0m'
 
-# Función para imprimir mensajes
+# Function to print messages
 log() {
   echo -e "${GREEN}[✓]${NC} $1"
 }
@@ -22,30 +22,30 @@ error() {
   exit 1
 }
 
-# Verificar que tmux esté instalado
+# Verify that tmux is installed
 if ! command -v tmux >/dev/null 2>&1; then
-  error "tmux no está instalado. Por favor, instálalo primero."
+  error "tmux is not installed. Please install it first."
 fi
 
-# Crear estructura de directorios
-log "Creando estructura de directorios..."
+# Create directory structure
+log "Creating directory structure..."
 mkdir -p ~/.tmux/{scripts,sessions,backups}
 
-# Backup de archivos existentes
+# Backup of existing files
 if [ -f ~/.tmux.conf ]; then
-  warn "Detectada configuración existente de tmux"
+  warn "Existing tmux configuration detected"
   timestamp=$(date +%Y%m%d_%H%M%S)
   cp ~/.tmux.conf ~/.tmux/backups/tmux.conf.$timestamp
-  log "Backup creado en ~/.tmux/backups/tmux.conf.$timestamp"
+  log "Backup created at ~/.tmux/backups/tmux.conf.$timestamp"
 fi
 
-# Copiar scripts
-log "Instalando scripts..."
+# Copy scripts
+log "Installing scripts..."
 cp scripts/tmux-persist.sh ~/.tmux/scripts/
 chmod +x ~/.tmux/scripts/tmux-persist.sh
 
-# Fusionar configuración
-log "Configurando tmux..."
+# Merge configuration
+log "Configuring tmux..."
 {
   if [ -f ~/.tmux.conf ]; then
     cat ~/.tmux.conf
@@ -55,19 +55,19 @@ log "Configurando tmux..."
 } >~/.tmux.conf.new
 mv ~/.tmux.conf.new ~/.tmux.conf
 
-# Configurar shell rc
+# Configuring shell rc
 configure_shell() {
   local rc_file=$1
   if [ -f "$rc_file" ]; then
     if ! grep -q "tmux-session-manager" "$rc_file"; then
-      log "Configurando $rc_file..."
+      log "Configuring $rc_file..."
       echo '
 # tmux-session-manager
 if command -v tmux >/dev/null 2>&1 && [ -z "$TMUX" ]; then
     ~/.tmux/scripts/tmux-persist.sh restore_tmux_sessions
 fi' >>"$rc_file"
     else
-      warn "Configuración ya existe en $rc_file"
+      warn "Configuration already exists in $rc_file"
     fi
   fi
 }
@@ -75,17 +75,17 @@ fi' >>"$rc_file"
 configure_shell ~/.bashrc
 configure_shell ~/.zshrc
 
-# Recargar tmux si está en uso
+# Reload tmux if it is in use
 if [ -n "$TMUX" ]; then
-  log "Recargando configuración de tmux..."
+  log "Reloading tmux configuration..."
   tmux source-file ~/.tmux.conf
 fi
 
-log "Instalación completada exitosamente!"
+log "Installation completed successfully!"
 echo -e "
 ${GREEN}Uso:${NC}
-- Las sesiones se guardan automáticamente al cerrarlas
-- Las sesiones se restauran al iniciar una nueva sesión de tmux
-- Comandos manuales:
-  ${YELLOW}~/.tmux/scripts/tmux-persist.sh save_tmux_sessions${NC}    # Guardar sesiones
-  ${YELLOW}~/.tmux/scripts/tmux-persist.sh restore_tmux_sessions${NC} # Restaurar sesiones"
+- The sessions are saved automatically when closing them
+- The sessions are restored when starting a new tmux session
+- Manual commands:
+  ${YELLOW}~/.tmux/scripts/tmux-persist.sh save_tmux_sessions${NC}    # Save current sessions
+  ${YELLOW}~/.tmux/scripts/tmux-persist.sh restore_tmux_sessions${NC} # Restore saved sessions"

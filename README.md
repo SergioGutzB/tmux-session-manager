@@ -1,119 +1,119 @@
 # Tmux Session Manager
 
-Un gestor de sesiones para tmux que permite guardar y restaurar sesiones de forma persistente. Mantiene el estado de tus ventanas, paneles y directorios de trabajo entre reinicios del sistema.
+A session manager for tmux that enables persistent saving and restoring of sessions. Maintains the state of your windows, panes, and working directories between system restarts.
 
-## Características
+## Features
 
-- ✨ Guarda y restaura sesiones de tmux
-- 🔄 Restauración automática de layouts y directorios de trabajo
-- 📝 Nombrado personalizado de sesiones guardadas
-- 🔍 Listado de sesiones disponibles
-- 🗑️ Limpieza automática de backups antiguos
-- ⚡ Soporte para múltiples sesiones
+- ✨ Save and restore tmux sessions
+- 🔄 Automatic restoration of layouts and working directories
+- 📝 Custom naming for saved sessions
+- 🔍 List available sessions
+- 🗑️ Automatic cleanup of old backups
+- ⚡ Support for multiple sessions
 
-## Instalación
+## Installation
 
 ```bash
-# Clonar el repositorio
-git clone https://github.com/tu-usuario/tmux-session-manager.git
+# Clone the repository
+git clone https://github.com/your-username/tmux-session-manager.git
 
-# Entrar al directorio
+# Enter directory
 cd tmux-session-manager
 
-# Ejecutar el instalador
+# Run installer
 ./install.sh
 ```
 
-## Uso
+## Usage
 
-### Comandos Básicos
+### Basic Commands
 
-1. Ver todos los comandos disponibles:
+1. View all available commands:
 ```bash
 ~/.tmux/scripts/tmux-persist.sh help
 ```
 
-2. Listar sesiones guardadas:
+2. List saved sessions:
 ```bash
 ~/.tmux/scripts/tmux-persist.sh list-saved
 ```
 
-### Guardar Sesiones
+### Saving Sessions
 
-1. Guardar todas las sesiones activas:
+1. Save all active sessions:
 ```bash
 ~/.tmux/scripts/tmux-persist.sh save_tmux_sessions
 ```
 
-2. Guardar una sesión específica con nombre personalizado:
+2. Save a specific session with a custom name:
 ```bash
-~/.tmux/scripts/tmux-persist.sh save-named nombre_sesion_actual nombre_guardado
+~/.tmux/scripts/tmux-persist.sh save-named current_session_name save_name
 ```
 
-Ejemplo:
+Example:
 ```bash
-# Guardar la sesión "desarrollo" como "proyecto_web"
-~/.tmux/scripts/tmux-persist.sh save-named desarrollo proyecto_web
+# Save the "development" session as "web_project"
+~/.tmux/scripts/tmux-persist.sh save-named development web_project
 ```
 
-### Restaurar Sesiones
+### Restoring Sessions
 
-1. Restaurar todas las sesiones del último backup:
+1. Restore all sessions from the latest backup:
 ```bash
 ~/.tmux/scripts/tmux-persist.sh restore_tmux_sessions
 ```
 
-2. Restaurar una sesión específica por nombre:
+2. Restore a specific session by name:
 ```bash
-~/.tmux/scripts/tmux-persist.sh restore-named nombre_guardado
+~/.tmux/scripts/tmux-persist.sh restore-named save_name
 ```
 
-Ejemplo:
+Example:
 ```bash
-# Restaurar la sesión guardada como "proyecto_web"
-~/.tmux/scripts/tmux-persist.sh restore-named proyecto_web
+# Restore the session saved as "web_project"
+~/.tmux/scripts/tmux-persist.sh restore-named web_project
 ```
 
-### Ejemplos de Flujo de Trabajo
+### Workflow Examples
 
-#### Ejemplo 1: Guardar sesión de desarrollo
+#### Example 1: Save development session
 ```bash
-# 1. Crear nueva sesión
-tmux new-session -s desarrollo
+# 1. Create new session
+tmux new-session -s development
 
-# 2. Configurar tu entorno (crear ventanas, paneles, etc.)
+# 2. Set up your environment (create windows, panes, etc.)
 
-# 3. Guardar la sesión
-~/.tmux/scripts/tmux-persist.sh save-named desarrollo mi_proyecto
+# 3. Save the session
+~/.tmux/scripts/tmux-persist.sh save-named development my_project
 
-# 4. Verificar que se guardó
+# 4. Verify it was saved
 ~/.tmux/scripts/tmux-persist.sh list-saved
 
-# 5. Más tarde, restaurar la sesión
-~/.tmux/scripts/tmux-persist.sh restore-named mi_proyecto
+# 5. Later, restore the session
+~/.tmux/scripts/tmux-persist.sh restore-named my_project
 ```
 
-#### Ejemplo 2: Backup de todas las sesiones
+#### Example 2: Backup all sessions
 ```bash
-# 1. Guardar todas las sesiones activas
+# 1. Save all active sessions
 ~/.tmux/scripts/tmux-persist.sh save_tmux_sessions
 
-# 2. Después de un reinicio, restaurar todas las sesiones
+# 2. After a restart, restore all sessions
 ~/.tmux/scripts/tmux-persist.sh restore_tmux_sessions
 ```
 
-## Resumen de Comandos
+## Command Summary
 
-| Comando | Descripción | Ejemplo |
+| Command | Description | Example |
 |---------|-------------|---------|
-| `help` | Muestra la ayuda | `~/.tmux/scripts/tmux-persist.sh help` |
-| `save_tmux_sessions` | Guarda todas las sesiones | `~/.tmux/scripts/tmux-persist.sh save_tmux_sessions` |
-| `restore_tmux_sessions` | Restaura todas las sesiones | `~/.tmux/scripts/tmux-persist.sh restore_tmux_sessions` |
-| `save-named` | Guarda una sesión con nombre | `~/.tmux/scripts/tmux-persist.sh save-named actual guardado` |
-| `list-saved` | Lista las sesiones guardadas | `~/.tmux/scripts/tmux-persist.sh list-saved` |
-| `restore-named` | Restaura una sesión por nombre | `~/.tmux/scripts/tmux-persist.sh restore-named guardado` |
+| `help` | Show help message | `~/.tmux/scripts/tmux-persist.sh help` |
+| `save_tmux_sessions` | Save all sessions | `~/.tmux/scripts/tmux-persist.sh save_tmux_sessions` |
+| `restore_tmux_sessions` | Restore all sessions | `~/.tmux/scripts/tmux-persist.sh restore_tmux_sessions` |
+| `save-named` | Save a session with name | `~/.tmux/scripts/tmux-persist.sh save-named current saved` |
+| `list-saved` | List saved sessions | `~/.tmux/scripts/tmux-persist.sh list-saved` |
+| `restore-named` | Restore a session by name | `~/.tmux/scripts/tmux-persist.sh restore-named saved` |
 
-## Estructura de Archivos
+## File Structure
 
 ```
 ~/.tmux/
@@ -123,7 +123,7 @@ tmux new-session -s desarrollo
 │   ├── latest -> sessions_[timestamp].txt
 │   ├── sessions_[timestamp].txt
 │   └── named/
-│       └── [nombre_guardado]/
+│       └── [save_name]/
 │           ├── session_name.txt
 │           ├── timestamp.txt
 │           ├── windows.txt
@@ -132,26 +132,26 @@ tmux new-session -s desarrollo
     └── tmux.conf.[timestamp]
 ```
 
-## Solución de Problemas
+## Troubleshooting
 
-### Las sesiones no se guardan
-- Verifica que tmux esté ejecutándose
-- Comprueba los permisos del directorio ~/.tmux/sessions
-- Asegúrate de que el script tiene permisos de ejecución
+### Sessions are not saving
+- Verify tmux is running
+- Check permissions of ~/.tmux/sessions directory
+- Ensure the script has execution permissions
 
-### Las sesiones no se restauran
-- Verifica que los archivos existen en ~/.tmux/sessions
-- Comprueba que no hay sesiones con el mismo nombre ya ejecutándose
-- Revisa los logs con el modo debug activado
+### Sessions are not restoring
+- Verify files exist in ~/.tmux/sessions
+- Check that no sessions with the same name are already running
+- Review logs with debug mode enabled
 
-## Contribuir
+## Contributing
 
-1. Fork el repositorio
-2. Crea una rama para tu feature (`git checkout -b feature/NuevaCaracteristica`)
-3. Commit tus cambios (`git commit -m 'Añade nueva característica'`)
-4. Push a la rama (`git push origin feature/NuevaCaracteristica`)
-5. Crea un Pull Request
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/NewFeature`)
+3. Commit your changes (`git commit -m 'Add new feature'`)
+4. Push to the branch (`git push origin feature/NewFeature`)
+5. Create a Pull Request
 
-## Licencia
+## License
 
-Este proyecto está bajo la licencia MIT. Ver el archivo `LICENSE` para más detalles.
+This project is licensed under the MIT License. See the `LICENSE` file for details.
