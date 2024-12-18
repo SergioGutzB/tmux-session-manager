@@ -10,6 +10,7 @@ A session manager for tmux that enables persistent saving and restoring of sessi
 - 🔍 List available sessions
 - 🗑️ Automatic cleanup of old backups
 - ⚡ Support for multiple sessions
+- 🎯 CLI with short commands for quick access
 
 ## Installation
 
@@ -22,9 +23,60 @@ cd tmux-session-manager
 
 # Run installer
 ./install.sh
+
+# Install CLI wrapper (optional but recommended)
+./install-cli.sh
+
+# Reload your shell or update PATH manually
+export PATH="$HOME/.local/bin:$PATH"
 ```
 
-## Usage
+## CLI Usage
+
+The CLI provides both full and short commands for easier use:
+
+### Quick Reference
+
+| Short Command | Long Command | Description | Example |
+|--------------|--------------|-------------|----------|
+| `-h` | `help` | Show help message | `tmux-manager -h` |
+| `-ls` | `list-saved` | List all saved sessions | `tmux-manager -ls` |
+| `-s` | `save_tmux_sessions` | Save all current sessions | `tmux-manager -s` |
+| `-r` | `restore_tmux_sessions` | Restore all sessions | `tmux-manager -r` |
+| `-sn` | `save-named` | Save session with name | `tmux-manager -sn dev project1` |
+| `-rn` | `restore-named` | Restore named session | `tmux-manager -rn project1` |
+
+### Examples
+
+1. Save current session with a name:
+```bash
+tmux-manager -sn development project_web
+# or
+tmux-manager save-named development project_web
+```
+
+2. List all saved sessions:
+```bash
+tmux-manager -ls
+# or
+tmux-manager list-saved
+```
+
+3. Restore a specific session:
+```bash
+tmux-manager -rn project_web
+# or
+tmux-manager restore-named project_web
+```
+
+4. Save all current sessions:
+```bash
+tmux-manager -s
+# or
+tmux-manager save_tmux_sessions
+```
+
+## Usage witout CLI
 
 ### Basic Commands
 
