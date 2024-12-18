@@ -229,8 +229,8 @@ show_help() {
   echo "Usage: tmux-manager <command> [arguments]"
   echo
   echo "Commands:"
-  printf "  %-30s %-20s %s\n" "save_tmux_sessions, -s" "" "Save all current sessions"
-  printf "  %-30s %-20s %s\n" "restore_tmux_sessions, -r" "" "Restore all sessions from latest backup"
+  printf "  %-30s %-20s %s\n" "save-tmux-sessions, -s" "" "Save all current sessions"
+  printf "  %-30s %-20s %s\n" "restore-tmux-sessions, -r" "" "Restore all sessions from latest backup"
   printf "  %-30s %-20s %s\n" "save-named, -sn" "<session> <name>" "Save a specific session with a custom name"
   printf "  %-30s %-20s %s\n" "list-saved, -ls" "" "Show all saved sessions"
   printf "  %-30s %-20s %s\n" "restore-named, -rn" "<name>" "Restore a session by its saved name"
@@ -244,34 +244,39 @@ show_help() {
 }
 
 case "$1" in
-save_tmux_sessions)
+save_tmux_sessions | save-tmux-sessions | -s)
   save_tmux_sessions
   ;;
-restore_tmux_sessions)
+restore_tmux_sessions | restore-tmux-sessions | -r)
   restore_tmux_sessions
   ;;
-save-named)
+save-named | save_named | -sn)
   if [ -z "$2" ] || [ -z "$3" ]; then
-    echo "Usage: $0 save-named <session_name> <save_name>"
+    echo "Usage: tmux-manager save-named|-sn <session_name> <save_name>"
     exit 1
   fi
   save_named_session "$2" "$3"
   ;;
-list-saved)
+list-saved | list_saved | -ls)
   list_saved_sessions
   ;;
-restore-named)
+restore-named | restore_named | -rn)
   if [ -z "$2" ]; then
-    echo "Usage: $0 restore-named <save_name>"
+    echo "Usage: tmux-manager restore-named|-rn <save_name>"
     exit 1
   fi
   restore_named_session "$2"
   ;;
-help)
+help | -h | --help)
   show_help
   ;;
-*)
+"")
   show_help
+  exit 1
+  ;;
+*)
+  echo "Error: Unknown command '$1'"
+  echo "Run 'tmux-manager -h' for usage information"
   exit 1
   ;;
 esac
