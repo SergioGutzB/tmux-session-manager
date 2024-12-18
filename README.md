@@ -1,75 +1,117 @@
-# tmux-session-manager
+# Tmux Session Manager
 
-Gestor de sesiones persistentes para tmux con soporte para configuraciones existentes y restauración automática.
+Un gestor de sesiones para tmux que permite guardar y restaurar sesiones de forma persistente. Mantiene el estado de tus ventanas, paneles y directorios de trabajo entre reinicios del sistema.
 
 ## Características
 
-- ✨ Persistencia automática de sesiones
-- 🔄 Restauración automática al iniciar
-- 📁 Preservación de directorios de trabajo
-- 🧩 Compatibilidad con configuraciones existentes
-- 🔒 Backup automático de configuraciones
-- 🧹 Limpieza automática de sesiones antiguas
-- 📝 Logging detallado (modo debug opcional)
-
-## Requisitos
-
-- tmux ≥ 2.1
-- bash ≥ 4.0
+- ✨ Guarda y restaura sesiones de tmux
+- 🔄 Restauración automática de layouts y directorios de trabajo
+- 📝 Nombrado personalizado de sesiones guardadas
+- 🔍 Listado de sesiones disponibles
+- 🗑️ Limpieza automática de backups antiguos
+- ⚡ Soporte para múltiples sesiones
 
 ## Instalación
 
 ```bash
-git clone https://github.com/TU_USUARIO/tmux-session-manager.git
+# Clonar el repositorio
+git clone https://github.com/tu-usuario/tmux-session-manager.git
+
+# Entrar al directorio
 cd tmux-session-manager
+
+# Ejecutar el instalador
 ./install.sh
 ```
 
-## Características Detalladas
-
-### Manejo de Configuraciones Existentes
-
-- Realiza backup automático de configuraciones existentes
-- Preserva configuraciones personalizadas
-- Integración no destructiva con .tmux.conf existente
-
-### Gestión de Sesiones
-
-- Guarda automáticamente al cerrar sesiones
-- Guarda automáticamente al desconectar cliente
-- Mantiene historial de sesiones por 7 días
-- Restaura layout de ventanas y paneles
-- Restaura directorios de trabajo
-
-### Seguridad y Confiabilidad
-
-- Verifica existencia de directorios antes de restaurar
-- Manejo de errores robusto
-- Logging detallado en modo debug
-
 ## Uso
 
-### Automático
-Las sesiones se guardan y restauran automáticamente.
+### Comandos Básicos
 
-### Manual
+1. Ver todos los comandos disponibles:
 ```bash
-# Guardar sesiones
-~/.tmux/scripts/tmux-persist.sh save_tmux_sessions
+~/.tmux/scripts/tmux-persist.sh help
+```
 
-# Restaurar sesiones
+2. Listar sesiones guardadas:
+```bash
+~/.tmux/scripts/tmux-persist.sh list-saved
+```
+
+### Guardar Sesiones
+
+1. Guardar todas las sesiones activas:
+```bash
+~/.tmux/scripts/tmux-persist.sh save_tmux_sessions
+```
+
+2. Guardar una sesión específica con nombre personalizado:
+```bash
+~/.tmux/scripts/tmux-persist.sh save-named nombre_sesion_actual nombre_guardado
+```
+
+Ejemplo:
+```bash
+# Guardar la sesión "desarrollo" como "proyecto_web"
+~/.tmux/scripts/tmux-persist.sh save-named desarrollo proyecto_web
+```
+
+### Restaurar Sesiones
+
+1. Restaurar todas las sesiones del último backup:
+```bash
 ~/.tmux/scripts/tmux-persist.sh restore_tmux_sessions
 ```
 
-### Debug
-Para activar el modo debug, edita scripts/tmux-persist.sh y cambia:
+2. Restaurar una sesión específica por nombre:
 ```bash
-DEBUG=false
+~/.tmux/scripts/tmux-persist.sh restore-named nombre_guardado
 ```
-a
+
+Ejemplo:
 ```bash
-DEBUG=true
+# Restaurar la sesión guardada como "proyecto_web"
+~/.tmux/scripts/tmux-persist.sh restore-named proyecto_web
 ```
+
+### Ejemplos de Flujo de Trabajo
+
+#### Ejemplo 1: Guardar sesión de desarrollo
+```bash
+# 1. Crear nueva sesión
+tmux new-session -s desarrollo
+
+# 2. Configurar tu entorno (crear ventanas, paneles, etc.)
+
+# 3. Guardar la sesión
+~/.tmux/scripts/tmux-persist.sh save-named desarrollo mi_proyecto
+
+# 4. Verificar que se guardó
+~/.tmux/scripts/tmux-persist.sh list-saved
+
+# 5. Más tarde, restaurar la sesión
+~/.tmux/scripts/tmux-persist.sh restore-named mi_proyecto
+```
+
+#### Ejemplo 2: Backup de todas las sesiones
+```bash
+# 1. Guardar todas las sesiones activas
+~/.tmux/scripts/tmux-persist.sh save_tmux_sessions
+
+# 2. Después de un reinicio, restaurar todas las sesiones
+~/.tmux/scripts/tmux-persist.sh restore_tmux_sessions
+```
+
+## Resumen de Comandos
+
+| Comando | Descripción | Ejemplo |
+|---------|-------------|---------|
+| `help` | Muestra la ayuda | `~/.tmux/scripts/tmux-persist.sh help` |
+| `save_tmux_sessions` | Guarda todas las sesiones | `~/.tmux/scripts/tmux-persist.sh save_tmux_sessions` |
+| `restore_tmux_sessions` | Restaura todas las sesiones | `~/.tmux/scripts/tmux-persist.sh restore_tmux_sessions` |
+| `save-named` | Guarda una sesión con nombre | `~/.tmux/scripts/tmux-persist.sh save-named actual guardado` |
+| `list-saved` | Lista las sesiones guardadas | `~/.tmux/scripts/tmux-persist.sh list-saved` |
+| `restore-named` | Restaura una sesión por nombre | `~/.tmux/scripts/tmux-persist.sh restore-named guardado` |
 
 ## Estructura de Archivos
 
@@ -78,33 +120,38 @@ DEBUG=true
 ├── scripts/
 │   └── tmux-persist.sh
 ├── sessions/
-│   ├── latest -> sessions_20241218_120000.txt
-│   ├── sessions_20241218_120000.txt
-│   ├── session_name_windows_20241218_120000.txt
-│   └── session_name_panes_20241218_120000.txt
+│   ├── latest -> sessions_[timestamp].txt
+│   ├── sessions_[timestamp].txt
+│   └── named/
+│       └── [nombre_guardado]/
+│           ├── session_name.txt
+│           ├── timestamp.txt
+│           ├── windows.txt
+│           └── panes.txt
 └── backups/
-    └── tmux.conf.20241218_120000
+    └── tmux.conf.[timestamp]
 ```
 
 ## Solución de Problemas
 
-### Las sesiones no se restauran
-- Verifica que tmux esté instalado y funcionando
-- Comprueba los permisos de ~/.tmux/scripts/tmux-persist.sh
-- Activa el modo debug para más información
+### Las sesiones no se guardan
+- Verifica que tmux esté ejecutándose
+- Comprueba los permisos del directorio ~/.tmux/sessions
+- Asegúrate de que el script tiene permisos de ejecución
 
-### Conflictos con configuración existente
-- Revisa los backups en ~/.tmux/backups/
-- Edita manualmente ~/.tmux.conf si es necesario
+### Las sesiones no se restauran
+- Verifica que los archivos existen en ~/.tmux/sessions
+- Comprueba que no hay sesiones con el mismo nombre ya ejecutándose
+- Revisa los logs con el modo debug activado
 
 ## Contribuir
 
-1. Fork el proyecto
-2. Crea tu rama de feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
+1. Fork el repositorio
+2. Crea una rama para tu feature (`git checkout -b feature/NuevaCaracteristica`)
+3. Commit tus cambios (`git commit -m 'Añade nueva característica'`)
+4. Push a la rama (`git push origin feature/NuevaCaracteristica`)
+5. Crea un Pull Request
 
 ## Licencia
 
-Distribuido bajo la licencia MIT. Ver `LICENSE` para más información.
+Este proyecto está bajo la licencia MIT. Ver el archivo `LICENSE` para más detalles.
