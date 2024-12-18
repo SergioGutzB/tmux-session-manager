@@ -1,5 +1,10 @@
 # Changelog
 
+## [1.2.0] - 2024-12-18
+### Fixed
+- fix calling method name from command cli
+
+
 ## [1.1.1] - 2024-12-18
 ### Fixed
 - fix updating changelog.md from release script
