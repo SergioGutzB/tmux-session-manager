@@ -224,15 +224,23 @@ restore_named_session() {
 }
 
 show_help() {
-  echo "Usage: $0 <command> [arguments]"
-  echo ""
-  echo "Available commands:"
-  echo "  save_tmux_sessions              - Save all current sessions"
-  echo "  restore_tmux_sessions           - Restore all sessions from latest backup"
-  echo "  save-named <session> <name>     - Save a specific session with a custom name"
-  echo "  list-saved                      - Show all saved sessions"
-  echo "  restore-named <name>            - Restore a session by its saved name"
-  echo "  help                            - Show this help message"
+  echo "tmux-manager - Tmux Session Manager"
+  echo
+  echo "Usage: tmux-manager <command> [arguments]"
+  echo
+  echo "Commands:"
+  printf "  %-30s %-20s %s\n" "save_tmux_sessions, -s" "" "Save all current sessions"
+  printf "  %-30s %-20s %s\n" "restore_tmux_sessions, -r" "" "Restore all sessions from latest backup"
+  printf "  %-30s %-20s %s\n" "save-named, -sn" "<session> <name>" "Save a specific session with a custom name"
+  printf "  %-30s %-20s %s\n" "list-saved, -ls" "" "Show all saved sessions"
+  printf "  %-30s %-20s %s\n" "restore-named, -rn" "<name>" "Restore a session by its saved name"
+  printf "  %-30s %-20s %s\n" "help, -h" "" "Show this help message"
+  echo
+  echo "Examples:"
+  echo "  tmux-manager -ls                          # List all saved sessions"
+  echo "  tmux-manager -sn development project1     # Save 'development' session as 'project1'"
+  echo "  tmux-manager -rn project1                 # Restore session named 'project1'"
+  echo "  tmux-manager -s                          # Save all current sessions"
 }
 
 case "$1" in
